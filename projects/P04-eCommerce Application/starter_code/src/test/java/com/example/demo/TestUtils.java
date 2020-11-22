@@ -5,9 +5,15 @@
 
 package com.example.demo;
 
+import com.example.demo.controllers.CartController;
 import java.lang.reflect.Field;
+import java.util.Arrays;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class TestUtils {
+    private static final Logger log = LoggerFactory.getLogger(TestUtils.class);
+
     public static void injectObjects(Object target, String fieldName, Object toInject) {
        boolean wasPrivate = false;
 
@@ -23,9 +29,9 @@ public class TestUtils {
                 f.setAccessible(false);
             }
         } catch (NoSuchFieldException e) {
-            e.printStackTrace();
+            log.error(Arrays.toString(e.getStackTrace()));
         } catch (IllegalAccessException e) {
-            e.printStackTrace();
+            log.error(Arrays.toString(e.getStackTrace()));
         }
     }
 
