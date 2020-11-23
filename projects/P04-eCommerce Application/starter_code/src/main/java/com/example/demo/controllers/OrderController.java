@@ -2,6 +2,7 @@ package com.example.demo.controllers;
 
 import java.util.List;
 
+import javassist.NotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,11 +45,13 @@ public class OrderController {
 	}
 	
 	@GetMapping("/history/{username}")
-	public ResponseEntity<List<UserOrder>> getOrdersForUser(@PathVariable String username) {
+	public ResponseEntity<List<UserOrder>> getOrdersForUser(@PathVariable String username)
+			throws NotFoundException {
 		User user = userRepository.findByUsername(username);
 		if(user == null) {
-            log.error("Cannot find order for this user. Please re-check the order or Login again.");
-			return ResponseEntity.notFound().build();
+			throw new NotFoundException("User not found");
+//            log.error("Cannot find order for this user. Please re-check the order or Login again.");
+//			return ResponseEntity.notFound().build();
 		}
         log.info("Order for user {} has been found", user.getUsername());
 		return ResponseEntity.ok(orderRepository.findByUser(user));
